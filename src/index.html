@@ -8,15 +8,19 @@
     <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
-   
-
-    <main>
-      <!-- Loads the specified .html file -->
-      
+    <main class="section">
+      <div class="container">
+        <form class="search-form">
+          <input class="input-content" type="text" name="user_query" placeholder="Search images..." required>
+          <button class="btn-search" type="submit">Search</button>
+        </form>
+          <ul class="gallery">
+              <span class="loader"></span>
+          </ul>
+      </div>
     </main>
-
+    
    
-
     <script type="module" src="./main.js"></script>
   </body>
 </html>
