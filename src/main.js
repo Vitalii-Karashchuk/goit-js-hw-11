@@ -10,17 +10,18 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 
 
 
-// import {fetchOption, urlParams, searchApi} from './js/pixabay-api.js'; 
+import {searchApi} from './js/pixabay-api'; 
+import {templateCard} from './js/render-functions';
 
 const formEl = document.querySelector('.search-form');
 const listItemsEl = document.querySelector('.gallery');
 const loaderEl = document.querySelector('.loader');
 
+loaderEl.style.display = 'none';
 
- 
 const handleClick = event => {
     event.preventDefault();
-    // loader start
+    loaderEl.style.display = 'block';
     
     const searchData = event.currentTarget.elements.user_query.value.trim();
     
@@ -28,27 +29,8 @@ const handleClick = event => {
        alert('Поле пошуку порожнє, заповніть поле пошуку!');
       return;
     };
-     
-    const fetchOption = {
-            key: "48272938-5d16b358faf0ec3baa9736196",
-            q: `${searchData}`,
-            image_type: "photo",
-            orientation: "horizontal",
-            safesearch: true,
-        };
-
-        const urlParams = new URLSearchParams(fetchOption);
-
-    fetch(`https://pixabay.com/api/?${urlParams}`)
-
-        .then(responce => {
-        if(!responce.ok){
-           
-            throw new Error(responce.status );
-        };
-
-            return responce.json();
-    })
+        
+     searchApi(searchData)
             .then(img => {
             if (img.total === 0) {
                 iziToast.error({ 
@@ -63,23 +45,12 @@ const handleClick = event => {
             };                   
 
                 formEl.reset();
-           
-            const cardImg = img.hits.map(imgs => {
-                return `
-                <a href="${imgs.largeImageURL}">
-                    <li class="gallary-card">
-                        <img class="gallary-img" src="${imgs.webformatURL}" alt=""> </img>
-                        <p> Likes ${imgs.likes}</p>
-                        <p> Views ${imgs.views}</p>
-                        <p> Comments ${imgs.comments}</p>
-                        <p> Downloads ${imgs.downloads}</p>
-                    </li>
-                </a>`
-             }).join();
+               
+            const cardImg = img.hits.map(element => templateCard(element)).join('');
 
             listItemsEl.innerHTML = cardImg;
             
-            // loader end
+            loaderEl.style.display = 'none';
 
             let gallery = new SimpleLightbox('.gallery a');
             gallery.refresh();
