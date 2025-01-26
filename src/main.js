@@ -26,7 +26,12 @@ const handleClick = event => {
     const searchData = event.currentTarget.elements.user_query.value.trim();
     
     if(searchData === ''){
-       alert('Поле пошуку порожнє, заповніть поле пошуку!');
+        iziToast.show({ 
+            title: 'Error',
+            message: 'Поле пошуку порожнє, заповніть поле пошуку!',
+            position: 'center',
+         });
+      
       return;
     };
         
@@ -58,7 +63,11 @@ const handleClick = event => {
             return;
         })
         .catch(err => {
-           
+            iziToast.error({ 
+                title: 'Error',
+                message: 'Error!',
+                position: 'center',
+             });
         });
 }
 
